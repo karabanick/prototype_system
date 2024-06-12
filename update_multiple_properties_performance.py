@@ -39,8 +39,8 @@ if __name__ == "__main__":
     # Define the performance metrics for the properties update
     property_ids = [2, 3, 4]  # List of property IDs to update
     period = 2
-    earnings = 160000
-    expenses_arrears = 90000
+    earnings = 190000
+    expenses_arrears = 100000
     property_info = 'Recently renovated'
     vacancy_status = 'Open for conferences'
     
