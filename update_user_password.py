@@ -25,6 +25,6 @@ def update_user_password(user_id, new_password):
 
 if __name__ == "__main__":
     # Example usage
-    user_id = 'user303'
-    new_password = 'newpassword303'
+    user_id = 'User101'
+    new_password = 'newpassword111'
     update_user_password(user_id, new_password)

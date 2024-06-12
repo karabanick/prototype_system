@@ -8,11 +8,11 @@ def connect_db():
 
 def update_multiple_property_performance(property_ids, period, earnings, expenses_arrears, property_info, vacancy_status):
     """
-    Update the performance metrics for multiple properties in the Property_Performance table.
+    Update the performance metrics for multiple properties in the PropertiesPerformance table, including profit calculation.
 
     Args:
         property_ids (list of int): The IDs of the properties to update.
-        period (int): The period for which the metrics are being updated.
+        period (str): The period for which the metrics are being updated (format: YYYY-MM).
         earnings (float): The earnings for the period.
         expenses_arrears (float): The expenses in arrears for the period.
         property_info (str): Information about the properties.
@@ -21,15 +21,20 @@ def update_multiple_property_performance(property_ids, period, earnings, expense
     try:
         conn = connect_db()
         cursor = conn.cursor()
+
+        # Calculate profit
+        profit = earnings - expenses_arrears
+
         # Iterate over property IDs and update performance metrics for each property
         for property_id in property_ids:
             cursor.execute("""
                 UPDATE Property_Performance
-                SET Earnings = ?, ExpensesArrears = ?, PropertyInfo = ?, VacancyStatus = ?
+                SET Earnings = ?, ExpensesArrears = ?, Profit = ?, PropertyInfo = ?, VacancyStatus = ?
                 WHERE PropertyID = ? AND PeriodID = ?
-            """, (earnings, expenses_arrears, property_info, vacancy_status, property_id, period))
+            """, (earnings, expenses_arrears, profit, property_info, vacancy_status, property_id, period))
+        
         conn.commit()
-        print(f"Performance metrics updated successfully for {len(property_ids)} properties for Period {period}.")
+        print(f"Performance metrics including profit updated successfully for {len(property_ids)} properties for Period {period}.")
     except sqlite3.Error as e:
         print(f"An error occurred: {e}")
     finally:
@@ -38,7 +43,7 @@ def update_multiple_property_performance(property_ids, period, earnings, expense
 if __name__ == "__main__":
     # Define the performance metrics for the properties update
     property_ids = [2, 3, 4]  # List of property IDs to update
-    period = 2
+    period = '2023-02'
     earnings = 190000
     expenses_arrears = 100000
     property_info = 'Recently renovated'
