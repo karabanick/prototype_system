@@ -1,7 +1,13 @@
+/* Existing Login Page Styles */
+/* Modify these selectors if necessary to avoid conflicts */
+
 body, html {
-  height: 100%;
   margin: 0;
+  padding: 0;
   font-family: Arial, sans-serif;
+  background: url('images/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
 }
 
 .login-container {
@@ -9,47 +15,133 @@ body, html {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-size: cover;
-  background-position: center;
 }
 
 .login-box {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.8);
   padding: 20px;
   border-radius: 10px;
-  text-align: center;
-  width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 300px;
+  text-align: center;
 }
 
-.logo {
-  width: 100px;
+.login-box img.logo {
+  max-width: 150px;
   margin-bottom: 20px;
 }
 
-input, select {
-  display: block;
-  width: calc(100% - 20px);
+.login-box h1 {
+  margin-bottom: 20px;
+}
+
+.login-box input[type="text"],
+.login-box input[type="password"] {
+  width: 90%;
   padding: 10px;
-  margin: 10px auto;
+  margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-button {
+.login-box input[type="submit"] {
+  width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
-  color: white;
+  background: #007bff;
+  color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
 }
 
-button:hover {
-  background-color: #45a049;
+.login-box input[type="submit"]:hover {
+  background: #0056b3;
 }
 
-.error {
+.error-message {
   color: red;
   display: none;
+}
+
+/* New Admin Dashboard Styles */
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f4f4f4;
+}
+
+header {
+  background: #333;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .logo {
+  height: 40px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+header p {
+  margin: 0;
+}
+
+header .logout {
+  background: #ff4b4b;
+  color: white;
+  padding: 8px 12px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  background: #444;
+  color: #fff;
+  display: flex;
+  margin: 0;
+}
+
+nav ul li {
+  margin: 0;
+  flex-grow: 1;
+}
+
+nav ul li a {
+  display: block;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+}
+
+nav ul li a:hover {
+  background: #555;
+}
+
+main {
+  flex-grow: 1;
+  padding: 20px;
+  background: white;
+}
+
+.widget {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #e7e7e7;
+  border-radius: 8px;
+}
+
+.widget h3 {
+  margin-top: 0;
 }
