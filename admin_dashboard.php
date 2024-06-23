@@ -24,6 +24,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
         </header>
         <nav>
             <ul>
+                <li><a href="admin/property_management.php">Property Management</a></li>
                 <li><a href="admin/user_management.php">User Management</a></li>
                 <li><a href="admin/system_settings.php">System Settings</a></li>
                 <li><a href="admin/reports.php">Reports</a></li>
@@ -32,7 +33,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
         </nav>
         <main>
             <div class="content">
-                <!-- Placeholder for widgets or summaries -->
+                <!-- Placeholder for System Overview, Recent Activities & Notifications -->
                 <h2>System Overview</h2>
                 <p>Here you can manage users, configure system settings, view reports, and audit logs.</p>
                 <div class="widget">
@@ -42,22 +43,22 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
                 <div class="widget">
                     <h3>Recent Activities</h3>
                     <ul id="recent-activities">
-                        <!-- Dynamically load recent activities here -->
+                        <!--  load recent activities here -->
                     </ul>
                 </div>
                 <div class="widget">
                     <h3>System Notifications</h3>
                     <ul id="notifications">
-                        <!-- Dynamically load notifications here -->
+                        <!-- load notifications here -->
                     </ul>
                 </div>
             </div>
         </main>
     </div>
     <script>
-        // JavaScript to dynamically load data (e.g., via AJAX)
+        // JavaScript to load data 
         document.addEventListener("DOMContentLoaded", () => {
-            // Example of fetching data using AJAX (assuming APIs or endpoints are available)
+            // Example of fetching data using Javascsript and APIs
             fetch('api/get_user_count.php')
                 .then(response => response.json())
                 .then(data => {

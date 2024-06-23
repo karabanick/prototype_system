@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
 }
 $db = new SQLite3('../property_database.db');
 
-// Handle create, update, delete actions
+// Handle create, update, delete actions by admin
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
     if ($action == 'create') {
