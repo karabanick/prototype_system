@@ -14,8 +14,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="dashboard-container">
+<body class ="admin-dashboard">
+    <div class="dashboard-container admin-dashboard">
         <header>
             <img src="images/logo.png" alt="Logo" class="logo">
             <h1>Admin Dashboard</h1>

@@ -1,13 +1,49 @@
-/* Existing Login Page Styles */
-/* Modify these selectors if necessary to avoid conflicts */
-
+/* Global Styles */
 body, html {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background: url('images/background.jpg') no-repeat center center fixed;
-  background-size: cover;
+  font-weight: 600;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+h1, h2, p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Font Style */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+.stylish-text {
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Sliding Background Images */
+body.login-page {
+  background: #000;
+  animation: slideBackground 30s infinite;
+}
+
+@keyframes slideBackground {
+  0% { background: url('images/bg1.jpg') no-repeat center center fixed; background-size: cover; }
+  33% { background: url('images/bg2.jpg') no-repeat center center fixed; background-size: cover; }
+  66% { background: url('images/bg3.jpg') no-repeat center center fixed; background-size: cover; }
+  100% { background: url('images/bg1.jpg') no-repeat center center fixed; background-size: cover; }
+}
+
+body.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(77, 2, 2, 0.4); /* Dark overlay for better visibility */
 }
 
 .login-container {
@@ -15,10 +51,12 @@ body, html {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 .login-box {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(58, 47, 47, 0.85);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -27,12 +65,13 @@ body, html {
 }
 
 .login-box img.logo {
-  max-width: 150px;
+  max-width: 100px;
   margin-bottom: 20px;
 }
 
 .login-box h1 {
   margin-bottom: 20px;
+  font-weight: 700;
 }
 
 .login-box input[type="text"],
@@ -64,17 +103,50 @@ body, html {
   display: none;
 }
 
-/* New Admin Dashboard Styles */
+/* Footer Styles */
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+}
 
-.dashboard-container {
+.footer p {
+  margin: 0;
+}
+
+/* Admin Dashboard Styles */
+body.admin-dashboard {
+  position: relative;
+  background: url('images/admin_background.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+body.admin-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay for better visibility */
+}
+
+.dashboard-container.admin-dashboard {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: #f4f4f4;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
 header {
-  background: #333;
+  background: rgba(51, 51, 51, 0.8); /* Updated to allow background image visibility */
   color: #fff;
   padding: 10px;
   display: flex;
@@ -89,6 +161,7 @@ header .logo {
 header h1 {
   margin: 0;
   font-size: 24px;
+  font-weight: 700;
 }
 
 header p {
@@ -106,7 +179,7 @@ header .logout {
 nav ul {
   list-style: none;
   padding: 0;
-  background: #444;
+  background: rgba(68, 68, 68, 0.8); /* Updated to allow background image visibility */
   color: #fff;
   display: flex;
   margin: 0;
@@ -126,22 +199,76 @@ nav ul li a {
 }
 
 nav ul li a:hover {
-  background: #555;
+  background: rgba(85, 85, 85, 0.8); /* Updated to allow background image visibility */
 }
 
 main {
   flex-grow: 1;
   padding: 20px;
-  background: white;
+  background: rgba(255, 255, 255, 0.9); /* Updated to allow background image visibility */
 }
 
 .widget {
   margin-bottom: 20px;
   padding: 15px;
-  background: #e7e7e7;
+  background: rgba(231, 231, 231, 0.8); /* Updated to allow background image visibility */
   border-radius: 8px;
 }
 
 .widget h3 {
   margin-top: 0;
+  font-weight: 500;
 }
+
+/* User Dashboard Styles */
+body.user-dashboard {
+  position: relative;
+  background: url('images/user_dashboard_background.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+body.user-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Dark overlay for better visibility */
+}
+
+.dashboard-container.user-dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Shared Styles */
+main {
+  flex-grow: 1;
+  padding: 20px;
+  background: rgba(39, 34, 34, 0.9); /* Updated to allow background image visibility */
+}
+
+/* Stylish Text */
+.top-text, .bottom-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+  font-size: 50px;
+}
+
+.top-text {
+  top: 20px;
+}
+
+.bottom-text {
+  bottom: 50px;
+  font-size: 30px;
+}
+

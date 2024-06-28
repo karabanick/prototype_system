@@ -6,11 +6,12 @@
     <title>User Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="login-container" style="background-image: url('images/background.jpg');">
+<body class="login-page">
+    <div class="top-text stylish-text">Birdeye Management System</div>
+    <div class="login-container">
         <div class="login-box">
             <img src="images/logo.png" alt="Logo" class="logo">
-            <h2>User Login</h2>
+            <h2>Hello!</h2>
             <form action="login_process.php" method="post">
                 <select name="role" required>
                     <option value="Property Owner">Property Owner</option>
@@ -22,6 +23,10 @@
             </form>
             <div class="error" id="error-message"></div>
         </div>
+    </div>
+    <div class="bottom-text stylish-text">Management at the tip of your fingers.</div>
+    <div class="footer">
+        <p>DANVAM CIRCLE | +254-000-000-00 | www.danvamcircle.co.ke | KENYA</p>
     </div>
 
     <script>
@@ -35,7 +40,7 @@
             }, 3000);
         }
 
-        // Check URL params for error
+        // Check for error
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('error')) {
             showError('Invalid Credentials');
