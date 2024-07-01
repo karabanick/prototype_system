@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="login-page">
-    <div class="top-text stylish-text">Birdeye Management System</div>
+    <div class="top-text stylish-text">Danvam Management System</div>
     <div class="login-container">
         <div class="login-box">
             <img src="images/logo.png" alt="Logo" class="logo">

@@ -26,7 +26,7 @@ h1, h2, p {
 /* Sliding Background Images */
 body.login-page {
   background: #000;
-  animation: slideBackground 30s infinite;
+  animation: slideBackground 60s infinite;
 }
 
 @keyframes slideBackground {

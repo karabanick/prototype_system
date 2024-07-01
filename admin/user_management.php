@@ -73,6 +73,10 @@ $roles = [];
 while ($row = $rolesQuery->fetchArray(SQLITE3_ASSOC)) {
     $roles[] = $row;
 }
+
+// Calculate total number of users
+$totalUsersQuery = executeQuery($db, 'SELECT COUNT(*) AS total_users FROM Users');
+$totalUsers = $totalUsersQuery->fetchArray(SQLITE3_ASSOC)['total_users'];
 ?>
 
 <!DOCTYPE html>
@@ -83,6 +87,15 @@ while ($row = $rolesQuery->fetchArray(SQLITE3_ASSOC)) {
     <title>User Management</title>
     <link rel="stylesheet" href="../style.css">
     <style>
+        /* Add background image and scroll functionality */
+        body {
+            background-image: url('../images/admin_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-y: scroll; /* Enable vertical scroll */
+        }
+
         /* Add some styles for modal */
         .modal {
             display: none;
@@ -124,6 +137,7 @@ while ($row = $rolesQuery->fetchArray(SQLITE3_ASSOC)) {
             <a href="../admin_dashboard.php" class="back">Back to Dashboard</a>
         </header>
         <main>
+            <h2>Total Users: <?php echo $totalUsers; ?></h2>
             <h2>Create User</h2>
             <form method="post" action="">
                 <input type="hidden" name="action" value="create">

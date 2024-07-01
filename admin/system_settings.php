@@ -1,4 +1,13 @@
 <?php
+// Function to execute queries and handle errors
+function executeQuery($db, $query) {
+    $result = $db->query($query);
+    if (!$result) {
+        die("Database Query Error: " . $db->lastErrorMsg());
+    }
+    return $result;
+}
+
 session_start();
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
     header('Location: ../index.php');
@@ -7,7 +16,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
 
 $db = new SQLite3('../property_database.db');
 
-// Function to fetch a setting from the database
+// Function to fetch one setting from the database
 function getSetting($db, $key) {
     $stmt = $db->prepare('SELECT setting_value FROM Settings WHERE setting_key = ?');
     $stmt->bindValue(1, $key, SQLITE3_TEXT);
@@ -42,7 +51,7 @@ function deleteSetting($db, $key) {
     $stmt->execute();
 }
 
-// Handle form submission
+// Handling form submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
     if ($action == 'update') {
@@ -56,6 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Fetch all settings
 $settings = getAllSettings($db);
+
+// Calculate total number of settings
+$totalSettingsQuery = executeQuery($db, 'SELECT COUNT(*) AS total_settings FROM Settings');
+$totalSettings = $totalSettingsQuery->fetchArray(SQLITE3_ASSOC)['total_settings'];
 ?>
 
 <!DOCTYPE html>
@@ -65,6 +78,16 @@ $settings = getAllSettings($db);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Settings</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Add background image and scroll functionality */
+        body {
+            background-image: url('../images/admin_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-y: scroll; /* Enable vertical scroll */
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -73,6 +96,8 @@ $settings = getAllSettings($db);
             <a href="../admin_dashboard.php" class="back">Back to Dashboard</a>
         </header>
         <main>
+            <h2>Total Settings: <?php echo $totalSettings; ?></h2>
+
             <h2>Update Settings</h2>
             <form method="post" action="">
                 <input type="hidden" name="action" value="update">

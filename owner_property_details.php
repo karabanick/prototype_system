@@ -82,6 +82,17 @@ try {
             echo "Failed to send message: " . $db->lastErrorMsg();
         }
     }
+
+    // Fetch messages sent by the manager to the owner
+    $received_messages_stmt = $db->prepare('SELECT message, timestamp FROM Messages WHERE property_id = :property_id AND sender_id = :manager_id AND receiver_id = :owner_id ORDER BY timestamp DESC');
+    $received_messages_stmt->bindValue(':property_id', $property_id, SQLITE3_INTEGER);
+    $received_messages_stmt->bindValue(':manager_id', $property['manager_id'], SQLITE3_INTEGER);
+    $received_messages_stmt->bindValue(':owner_id', $owner_id, SQLITE3_INTEGER);
+    $received_messages_result = $received_messages_stmt->execute();
+    $received_messages = [];
+    while ($msg = $received_messages_result->fetchArray(SQLITE3_ASSOC)) {
+        $received_messages[] = $msg;
+    }
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     exit();
@@ -96,7 +107,7 @@ try {
     <title>Property Details - <?php echo htmlspecialchars($property['property_name']); ?></title>
     <style>
         body {
-            background: url("images/<?php echo htmlspecialchars($property['property_image']); ?>") no-repeat center center fixed;
+            background: url("<?php echo htmlspecialchars($property['property_image']); ?>") no-repeat center center fixed;
             background-size: cover;
             font-family: Arial, sans-serif;
             margin: 0;
@@ -195,6 +206,10 @@ try {
             flex-direction: column;
             gap: 10px;
         }
+
+        .back-to-dashboard {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -206,7 +221,6 @@ try {
             <tr>
                 <th>Timestamp</th>
                 <th>Rental Income</th>
-                <th>Tips</th>
                 <th>Operation Cost</th>
                 <th>Maintenance Cost</th>
                 <th>Unexpected Cost</th>
@@ -230,57 +244,73 @@ try {
         </table>
 
         <div class="messages">
-        <h3>Communication with Manager</h3>
-        <!-- Form for sending messages to the manager -->
-        <form method="POST" action="">
-            <textarea name="message" rows="3" placeholder="Type your message to the manager"></textarea><br>
-            <button type="submit" name="send_message">Send Message</button>
-        </form>
+            <h3>Communication with Manager</h3>
+            <!-- Display received messages -->
+            <?php if (!empty($received_messages)): ?>
+                <?php foreach ($received_messages as $msg): ?>
+                    <div class="message">
+                        <p><?php echo htmlspecialchars($msg['message']); ?></p>
+                        <div class="meta"><?php echo htmlspecialchars($msg['timestamp']); ?></div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>No messages received yet.</p>
+            <?php endif; ?>
+
+            <!-- Form for sending messages to the manager -->
+            <form method="POST" action="">
+                <textarea name="message" rows="3" placeholder="Type your message to the manager"></textarea><br>
+                <button type="submit" name="send_message">Send Message</button>
+            </form>
+        </div>
+
+        <div class="notes">
+            <h3>Notes</h3>
+            <!-- Form for saving notes about the property -->
+            <form method="POST" action="">
+                <textarea name="note" rows="3" placeholder="Write your notes here"></textarea><br>
+                <button type="submit" name="save_note">Save Note</button>
+            </form>
+        </div>
+
+        <div class="calculator">
+            <h3>Simple Calculator</h3>
+            <!-- Basic calculator for property related calculations -->
+            <!-- Example for rental income calculation -->
+            <label for="rental_income">Rental Income:</label>
+            <input type="number" id="rental_income" name="rental_income" placeholder="Enter rental income">
+            
+            <label for="operation_cost">Operation Cost:</label>
+            <input type="number" id="operation_cost" name="operation_cost" placeholder="Enter operation cost">
+
+            <label for="maintenance_cost">Maintenance Cost:</label>
+            <input type="number" id="maintenance_cost" name="maintenance_cost" placeholder="Enter maintenance cost">
+
+            <label for="unexpected_cost">Unexpected Cost:</label>
+            <input type="number" id="unexpected_cost" name="unexpected_cost" placeholder="Enter unexpected cost">
+
+            <button type="button" onclick="calculateProfit()">Calculate Profit</button>
+            <p id="profitResult"></p>
+        </div>
+
+        <script>
+            function calculateProfit() {
+                var rentalIncome = parseFloat(document.getElementById('rental_income').value) || 0;
+                var operationCost = parseFloat(document.getElementById('operation_cost').value) || 0;
+                var maintenanceCost = parseFloat(document.getElementById('maintenance_cost').value) || 0;
+                var unexpectedCost = parseFloat(document.getElementById('unexpected_cost').value) || 0;
+                var profit = (rentalIncome - (operationCost + maintenanceCost + unexpectedCost)).toFixed(2);
+                document.getElementById('profitResult').innerText = 'Estimated Profit: $' + profit;
+            }
+        </script>
+
+        <h3>Contact Information</h3>
+        <p><strong>Manager: </strong><?php echo htmlspecialchars($manager['username']); ?></p>
+        <p><strong>Contact Info: </strong><?php echo htmlspecialchars($manager['email']); ?></p>
+
+        <div class="back-to-dashboard">
+            <button onclick="window.location.href='user_dashboard.php';">Back to Dashboard</button>
+        </div>
     </div>
-
-    <div class="notes">
-        <h3>Notes</h3>
-        <!-- Form for saving notes about the property -->
-        <form method="POST" action="">
-            <textarea name="note" rows="3" placeholder="Write your notes here"></textarea><br>
-            <button type="submit" name="save_note">Save Note</button>
-        </form>
-    </div>
-
-    <div class="calculator">
-        <h3>Simple Calculator</h3>
-        <!-- Basic calculator for property related calculations -->
-        <!-- Example for rental income calculation -->
-        <label for="rental_income">Rental Income:</label>
-        <input type="number" id="rental_income" name="rental_income" placeholder="Enter rental income">
-        
-        <label for="operation_cost">Operation Cost:</label>
-        <input type="number" id="operation_cost" name="operation_cost" placeholder="Enter operation cost">
-
-        <label for="maintenance_cost">Maintenance Cost:</label>
-        <input type="number" id="maintenance_cost" name="maintenance_cost" placeholder="Enter maintenance cost">
-
-        <label for="unexpected_cost">Unexpected Cost:</label>
-        <input type="number" id="unexpected_cost" name="unexpected_cost" placeholder="Enter unexpected cost">
-
-        <button type="button" onclick="calculateProfit()">Calculate Profit</button>
-        <p id="profitResult"></p>
-    </div>
-
-    <script>
-        function calculateProfit() {
-            var rentalIncome = parseFloat(document.getElementById('rental_income').value) || 0;
-            var operationCost = parseFloat(document.getElementById('operation_cost').value) || 0;
-            var maintenanceCost = parseFloat(document.getElementById('maintenance_cost').value) || 0;
-            var unexpectedCost = parseFloat(document.getElementById('unexpected_cost').value) || 0;
-            var profit = (rentalIncome - (operationCost + maintenanceCost + unexpectedCost)).toFixed(2);
-            document.getElementById('profitResult').innerText = 'Estimated Profit: $' + profit;
-        }
-    </script>
-
-    <h3>Contact Information</h3>
-    <p><strong>Manager: </strong><?php echo htmlspecialchars($manager['username']); ?></p>
-    <p><strong>Contact Info: </strong><?php echo htmlspecialchars($manager['email']); ?></p>
-</div>
 </body>
 </html>

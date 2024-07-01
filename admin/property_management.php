@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'Admin') {
 
 $db = new SQLite3('../property_database.db');
 
-// Function to execute queries and handle errors
+// Function to execute database queries for CRUD operations and handle errors
 function executeQuery($db, $query) {
     $result = $db->query($query);
     if (!$result) {
@@ -16,7 +16,7 @@ function executeQuery($db, $query) {
     return $result;
 }
 
-// Fetch properties with manager and owner
+// Fetching properties with manager and owner names displayed
 $propertiesQuery = executeQuery($db, '
     SELECT Properties.property_id AS property_id, Properties.property_name AS property_name, Properties.location, 
            Managers.username AS manager_name, Owners.username AS owner_name
@@ -43,7 +43,11 @@ while ($row = $managersQuery->fetchArray(SQLITE3_ASSOC)) {
     $managers[] = $row;
 }
 
-// Handle add/edit/delete property
+// Calculate total number of properties
+$totalPropertiesQuery = executeQuery($db, 'SELECT COUNT(*) AS total_properties FROM Properties');
+$totalProperties = $totalPropertiesQuery->fetchArray(SQLITE3_ASSOC)['total_properties'];
+
+// Handle add/edit/delete properties
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $action = $_POST['action'];
     if ($action == 'add') {
@@ -83,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif ($action == 'delete') {
         $property_id = $_POST['property_id'];
         
-        // Ensure property_id is valid and belongs to a property
+        // Error message for invalid property_id
         if (empty($property_id)) {
             die("Error: Invalid property ID.");
         }
@@ -120,6 +124,102 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Property Management</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            background-image: url('../images/admin_background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow-y: scroll; /* Enable vertical scroll */
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        main {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .back {
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .back:hover {
+            background-color: #cc0000;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -128,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a href="../admin_dashboard.php" class="back">Back to Dashboard</a>
         </header>
         <main>
-            <h2>Properties</h2>
+            <h2>Total Properties: <?php echo $totalProperties; ?></h2>
             <table>
                 <tr>
                     <th>ID</th>

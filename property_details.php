@@ -126,7 +126,7 @@ try {
     <title>Property Details - <?php echo htmlspecialchars($property['property_name']); ?></title>
     <style>
         body {
-            background: url("images/<?php echo htmlspecialchars($property['property_image']); ?>") no-repeat center center fixed;
+            background: url("<?php echo htmlspecialchars($property['property_image']); ?>") no-repeat center center fixed;
             background-size: cover;
             font-family: Arial, sans-serif;
             margin: 0;
@@ -218,6 +218,14 @@ try {
             color: #777;
             font-size: 0.9em;
         }
+        
+        .back-to-dashboard {
+            position: fixed;
+            bottom: 20px;
+            left: 50%; /* Centers the button horizontally */
+            transform: translateX(-50%);
+        }
+
     </style>
 </head>
 <body>
@@ -225,21 +233,20 @@ try {
         <h2>Property: <?php echo htmlspecialchars($property['property_name']); ?></h2>
         <form method="post">
             <h3>Performance Metrics</h3>
-            <?php if ($property['property_type'] == 'Airbnb'): ?>
+
                 <label for="rental_income">Rental Income:</label>
                 <input type="number" step="0.01" id="rental_income" name="rental_income" value="<?php echo htmlspecialchars($metrics[0]['rental_income'] ?? ''); ?>" required>
 
-                <label for="tips">Tips:</label>
+                <label for="tips">Grants:</label>
                 <input type="number" step="0.01" id="tips" name="tips" value="<?php echo htmlspecialchars($metrics[0]['tips'] ?? ''); ?>" required>
-            <?php endif; ?>
 
-            <?php if ($property['property_type'] == 'Warehouse' || $property['property_type'] == 'Storage Unit'): ?>
+
                 <label for="operation_cost">Operation Cost:</label>
                 <input type="number" step="0.01" id="operation_cost" name="operation_cost" value="<?php echo htmlspecialchars($metrics[0]['operation_cost'] ?? ''); ?>" required>
 
                 <label for="maintenance_cost">Maintenance Cost:</label>
                 <input type="number" step="0.01" id="maintenance_cost" name="maintenance_cost" value="<?php echo htmlspecialchars($metrics[0]['maintenance_cost'] ?? ''); ?>" required>
-            <?php endif; ?>
+
 
             <label for="unexpected_cost">Unexpected Cost:</label>
             <input type="number" step="0.01" id="unexpected_cost" name="unexpected_cost" value="<?php echo htmlspecialchars($metrics[0]['unexpected_cost'] ?? ''); ?>" required>
@@ -259,7 +266,7 @@ try {
                 <tr>
                     <th>Timestamp</th>
                     <th>Rental Income</th>
-                    <th>Tips</th>
+                    <th>Grants</th>
                     <th>Operation Cost</th>
                     <th>Maintenance Cost</th>
                     <th>Unexpected Cost</th>
@@ -309,6 +316,10 @@ try {
                 <textarea id="message" name="message" required></textarea>
                 <button type="submit" name="send_message">Send</button>
             </form>
+        </div>
+    </div>
+    <div class="back-to-dashboard">
+            <button onclick="window.location.href='user_dashboard.php';">Back to Dashboard</button>
         </div>
     </div>
 </body>
